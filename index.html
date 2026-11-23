@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        @font-face {
+            font-family: 'BaskervvilleSC';
+            src: url('BaskervvilleSC-VariableFont_wght.ttf') format('truetype');
+            font-weight: 400 700; /* variable font weight range */
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'BaskervvilleSC', Georgia, 'Times New Roman', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: transparent;
+            color: #4a3f35;
+        }
+
+        .timer-container {
+            text-align: center;
+            padding: 20px 10px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 { display: none; }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 5px;
+        }
+
+        .number {
+            font-size: 4.5rem;
+            font-weight: 400;
+            color: #5a4a3a;
+            line-height: 1;
+            font-family: 'BaskervvilleSC', Georgia, 'Times New Roman', serif;
+            letter-spacing: 2px;
+        }
+
+        /* Green seconds like the example */
+        #seconds {
+            color: #3d6b2e;
+        }
+
+        .label {
+            font-size: 1rem;
+            color: #6b5d4f;
+            margin-top: 5px;
+            display: block;
+            font-family: 'BaskervvilleSC', Georgia, 'Times New Roman', serif;
+            letter-spacing: 1px;
+        }
+
+        /* Colon separators */
+        .separator {
+            font-size: 4rem;
+            color: #5a4a3a;
+            line-height: 1;
+            margin: 0 -5px;
+            padding-bottom: 25px;
+            font-family: 'BaskervvilleSC', Georgia, 'Times New Roman', serif;
+        }
+
+        /* Responsive scaling */
+        @media (max-width: 600px) {
+            .number { font-size: 2.8rem; }
+            .separator { font-size: 2.5rem; padding-bottom: 15px; }
+            .label { font-size: 0.8rem; }
+        }
+
+        @media (max-width: 400px) {
+            .number { font-size: 2rem; }
+            .separator { font-size: 1.8rem; padding-bottom: 10px; }
+            .label { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="timer-container">
+        <h1 id="target-date-display"></h1>
+        
+        <div class="countdown-grid" id="countdown-grid">
+            <div class="time-box">
+                <span class="number" id="days">285</span>
+                <span class="label">Days</span>
+            </div>
+            <span class="separator">:</span>
+            <div class="time-box">
+                <span class="number" id="hours">22</span>
+                <span class="label">Hours</span>
+            </div>
+            <span class="separator">:</span>
+            <div class="time-box">
+                <span class="number" id="minutes">00</span>
+                <span class="label">Minutes</span>
+            </div>
+            <span class="separator">:</span>
+            <div class="time-box">
+                <span class="number" id="seconds">03</span>
+                <span class="label">Seconds</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Hardcoded target date/time – September 4, 2027 at 4:00 PM (local time)
+        const targetDate = new Date('2027-09-04T16:00:00').getTime();
+        
+        // DOM elements
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const targetDateDisplay = document.getElementById('target-date-display');
+        const countdownGrid = document.getElementById('countdown-grid');
+
+        function format(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance <= 0) {
+                daysEl.textContent = '0';
+                hoursEl.textContent = '0';
+                minutesEl.textContent = '0';
+                secondsEl.textContent = '0';
+                countdownGrid.style.display = 'none';
+            } else {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                daysEl.textContent = format(days);
+                hoursEl.textContent = format(hours);
+                minutesEl.textContent = format(minutes);
+                secondsEl.textContent = format(seconds);
+            }
+        }
+
+        // Update every second
+        setInterval(updateCountdown, 1000);
+
+        // Initial update
+        updateCountdown();
+    </script>
+</body>
+</html>
